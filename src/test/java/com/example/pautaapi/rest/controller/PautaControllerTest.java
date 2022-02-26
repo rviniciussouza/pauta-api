@@ -2,9 +2,11 @@ package com.example.pautaapi.rest.controller;
 
 import com.example.pautaapi.domain.Pauta;
 import com.example.pautaapi.rest.request.PautaRequest;
+import com.example.pautaapi.rest.request.SessaoRequest;
 import com.example.pautaapi.service.PautaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -35,6 +37,7 @@ public class PautaControllerTest {
     PautaService service;
 
     @Test
+    @DisplayName("Deve cadastrar uma nova pauta")
     public void cadastrarPauta() throws Exception {
         PautaRequest pautaRequest = new PautaRequest("titulo");
         Pauta pauta = Pauta.builder().id("id").titulo("titulo").build();
@@ -42,7 +45,7 @@ public class PautaControllerTest {
 
         String content = new ObjectMapper().writeValueAsString(pautaRequest);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-            .post(PAUTA_API)
+            .post("/api/v1/pautas")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(content);
@@ -50,5 +53,21 @@ public class PautaControllerTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("id").isNotEmpty())
             .andExpect(jsonPath("titulo").value(pautaRequest.getTitulo()));
+    }
+
+    @Test
+    @DisplayName("Deve abrir uma sessão de votação para a pauta")
+    public void abrirSessaoVotacao() throws Exception {
+        SessaoRequest sessaoRequest = new SessaoRequest(2);
+        Pauta pauta = Pauta.builder().id("id").titulo("titulo").build();
+        when(service.abrirSessao(Mockito.any(), Mockito.any())).thenReturn(pauta);
+        String content = new ObjectMapper().writeValueAsString(sessaoRequest);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post(PAUTA_API + "/id/abrir")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(content);
+        mvc.perform(request)
+            .andExpect(status().isOk());
     }
 }
