@@ -4,10 +4,14 @@ import com.example.pautaapi.domain.OpcaoVoto;
 import com.example.pautaapi.domain.Pauta;
 import com.example.pautaapi.domain.Voto;
 import com.example.pautaapi.exception.PautaNaoEncontradaException;
+import com.example.pautaapi.exception.SessaoFinalizadaExcepetion;
+import com.example.pautaapi.exception.SessaoNaoAbertaException;
+import com.example.pautaapi.exception.VotoDuplicadoException;
 import com.example.pautaapi.repository.PautaRepository;
 import com.example.pautaapi.service.impl.PautaServiceImpl;
 
 import static com.example.pautaapi.stubs.PautaStub.pautaAberta;
+import static com.example.pautaapi.stubs.PautaStub.pautaEncerrada;
 import static com.example.pautaapi.stubs.PautaStub.pautaSemSessao;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,9 +43,12 @@ public class PautaServiceTest {
     @Captor
     private ArgumentCaptor<Pauta> pautaArgumentCaptor;
 
+    Voto voto;
+
     @BeforeEach 
     public void setUp() {
         this.service = new PautaServiceImpl(repository);
+        voto = new Voto("idAssociado", "CPF", OpcaoVoto.SIM);
     }
 
     @Test
@@ -52,7 +59,7 @@ public class PautaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve iniciar a seção de votação sucesso")
+    @DisplayName("Deve iniciar a sessão de votação sucesso")
     public void abrirSessao() {
         when(repository.findById(any())).thenReturn(Optional.of(pautaSemSessao()));
         when(repository.save(any())).thenReturn(pautaAberta());
@@ -72,11 +79,21 @@ public class PautaServiceTest {
         assertThat(exception.getMessage()).isEqualTo("Pauta 'id' não foi encontrada.");
     }
 
-    // @Test
-    // @DisplayName("Deve adicionar um voto com sucesso")             
-    // public void adicionarVoto() {
-    //     when(repository.findById(any())).thenReturn(Optional.of(pautaAberta()));
-    //     service.adicionarVoto("idPauta", new Voto("idAssociado", "CPF", OpcaoVoto.SIM));
-    //     verify(repository, Mockito.times(1)).save(pautaArgumentCaptor.capture());
-    // }
+    @Test
+    @DisplayName("Deve obter uma excessão SessaoNaoAbertaException")             
+    public void votoEmSessaoNaoIniciada() {
+        when(repository.findById(any())).thenReturn(Optional.of(pautaSemSessao()));
+        Throwable exception = Assertions.catchThrowable(
+            () -> service.adicionarVoto("idPauta", this.voto));
+        assertThat(exception).isInstanceOf(SessaoNaoAbertaException.class);
+    }
+
+    @Test
+    @DisplayName("Deve obter uma excessão SessaoFinalizadaExcepetion")             
+    public void votoEmSessaoEncerrada() {
+        when(repository.findById(any())).thenReturn(Optional.of(pautaEncerrada()));
+        Throwable exception = Assertions.catchThrowable(
+            () -> service.adicionarVoto("idPauta", this.voto));
+        assertThat(exception).isInstanceOf(SessaoFinalizadaExcepetion.class);
+    }
 }

@@ -32,6 +32,14 @@ public class PautaServiceImpl implements PautaService {
         return Optional.of(this.getPauta(idPauta))
             .map(pauta -> pauta.abrirSecao(minutos))
             .map(repository::save)
-            .orElseThrow(() -> new PautaNaoEncontradaException(idPauta));
+            .get();
+    }
+
+    @Override
+    public Pauta adicionarVoto(String idPauta, Voto voto) {
+        return Optional.of(this.getPauta(idPauta))
+            .map(pauta -> pauta.adicionarVoto(voto))
+            .map(repository::save)
+            .get();
     }
 }

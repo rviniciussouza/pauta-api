@@ -1,9 +1,7 @@
 package com.example.pautaapi.domain;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.example.pautaapi.exception.SessaoJaIniciadaException;
+import com.example.pautaapi.exception.SessaoNaoAbertaException;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,6 +27,14 @@ public class Pauta {
             throw new SessaoJaIniciadaException(id);
         }
         this.sessaoVotacao = new SessaoVotacao(minutos);
+        return this;
+    }
+
+    public Pauta adicionarVoto(Voto voto) {
+        if(this.sessaoVotacao == null) {
+            throw new SessaoNaoAbertaException(id);
+        }
+        this.sessaoVotacao.votar(voto);
         return this;
     }
 }

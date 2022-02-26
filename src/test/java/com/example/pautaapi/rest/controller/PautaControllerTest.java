@@ -1,8 +1,10 @@
 package com.example.pautaapi.rest.controller;
 
+import com.example.pautaapi.domain.OpcaoVoto;
 import com.example.pautaapi.domain.Pauta;
 import com.example.pautaapi.rest.request.PautaRequest;
 import com.example.pautaapi.rest.request.SessaoRequest;
+import com.example.pautaapi.rest.request.VotoRequest;
 import com.example.pautaapi.service.PautaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.example.pautaapi.stubs.PautaStub.pautaAberta;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,6 +67,21 @@ public class PautaControllerTest {
         String content = new ObjectMapper().writeValueAsString(sessaoRequest);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post(PAUTA_API + "/id/abrir")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(content);
+        mvc.perform(request)
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve adicionar um novo voto")
+    public void adicionarVoto() throws Exception {
+        VotoRequest votoRequest = new VotoRequest("idAssociado", "CPF", OpcaoVoto.SIM);
+        when(service.adicionarVoto(Mockito.any(), Mockito.any())).thenReturn(pautaAberta());
+        String content = new ObjectMapper().writeValueAsString(votoRequest);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post(PAUTA_API + "/id/votar")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(content);

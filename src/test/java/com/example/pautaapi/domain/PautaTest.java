@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class PautaTest {
     
     @Test
-    @DisplayName("Deve abrir a seção de votação com sucesso")
+    @DisplayName("Deve abrir a sessão de votação com sucesso")
     public void abrirSecao() {
         Pauta pauta = pautaSemSessao();
         pauta.abrirSecao(null);
@@ -28,6 +28,6 @@ public class PautaTest {
         Throwable exception = Assertions.catchThrowable(
             () -> pauta.abrirSecao(null));
         assertThat(exception).isInstanceOf(SessaoJaIniciadaException.class);
-        assertThat(exception.getMessage()).isEqualTo("A seção da pauta 'id' já foi iniciada anteriormente.");
+        assertThat(exception.getMessage()).isEqualTo("A sessão da pauta 'id' já foi iniciada anteriormente.");
     }
 }

@@ -46,14 +46,14 @@ public class PautaController {
         return modelMapper.map(pauta, PautaResponse.class);
     }
 
-    // @PostMapping("/{idPauta}/votar")
-    // @ResponseStatus(HttpStatus.OK)
-    // public PautaResponse votar(
-    //     @PathVariable String idPauta,
-    //     @RequestBody @Valid VotoRequest votoRequest)
-    // {
-    //     Voto voto = modelMapper.map(votoRequest, Voto.class);
-    //     Pauta pauta = service.adicionarVoto(idPauta, voto);
-    //     return modelMapper.map(pauta, PautaResponse.class);
-    // }
+    @PostMapping("/{idPauta}/votar")
+    @ResponseStatus(HttpStatus.OK)
+    public PautaResponse votar(
+        @PathVariable String idPauta,
+        @RequestBody @Valid VotoRequest votoRequest)
+    {
+        Voto voto = modelMapper.map(votoRequest, Voto.class);
+        Pauta pauta = service.adicionarVoto(idPauta, voto);
+        return modelMapper.map(pauta, PautaResponse.class);
+    }
 }

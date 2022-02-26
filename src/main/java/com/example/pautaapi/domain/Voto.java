@@ -12,5 +12,12 @@ import lombok.NoArgsConstructor;
 public class Voto {
     private String id;
     private String idAssociado;
-    private String cpf;
+    private String cpfAssociado;
+    private OpcaoVoto voto;
+
+    public Voto(String idAssociado, String cpfAssociado, OpcaoVoto voto) {
+        this.idAssociado = idAssociado;
+        this.cpfAssociado = cpfAssociado;
+        this.voto = voto;
+    }
 }
