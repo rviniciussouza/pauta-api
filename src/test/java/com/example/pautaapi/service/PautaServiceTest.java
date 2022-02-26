@@ -1,6 +1,8 @@
 package com.example.pautaapi.service;
 
+import com.example.pautaapi.domain.OpcaoVoto;
 import com.example.pautaapi.domain.Pauta;
+import com.example.pautaapi.domain.Voto;
 import com.example.pautaapi.exception.PautaNaoEncontradaException;
 import com.example.pautaapi.repository.PautaRepository;
 import com.example.pautaapi.service.impl.PautaServiceImpl;
@@ -56,7 +58,7 @@ public class PautaServiceTest {
         when(repository.save(any())).thenReturn(pautaAberta());
         service.abrirSessao("id", null);
         verify(repository, Mockito.times(1)).save(pautaArgumentCaptor.capture());
-        assertNotNull(pautaArgumentCaptor.getValue().getTempoLimite());
+        assertNotNull(pautaArgumentCaptor.getValue().getSessaoVotacao());
 
     }
 
@@ -69,4 +71,12 @@ public class PautaServiceTest {
         assertThat(exception).isInstanceOf(PautaNaoEncontradaException.class);
         assertThat(exception.getMessage()).isEqualTo("Pauta 'id' não foi encontrada.");
     }
+
+    // @Test
+    // @DisplayName("Deve adicionar um voto com sucesso")             
+    // public void adicionarVoto() {
+    //     when(repository.findById(any())).thenReturn(Optional.of(pautaAberta()));
+    //     service.adicionarVoto("idPauta", new Voto("idAssociado", "CPF", OpcaoVoto.SIM));
+    //     verify(repository, Mockito.times(1)).save(pautaArgumentCaptor.capture());
+    // }
 }

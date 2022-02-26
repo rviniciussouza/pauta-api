@@ -1,22 +1,23 @@
 package com.example.pautaapi.stubs;
 
-import java.time.LocalDateTime;
+import static com.example.pautaapi.stubs.SessaoStub.sessaoVotacaoDefault;
+import static com.example.pautaapi.stubs.SessaoStub.sessaoVotacaoEncerrada;
 
 import com.example.pautaapi.domain.Pauta;
 
 public class PautaStub {
- 
+    
     public static Pauta pautaAberta() {
         return Pauta.builder().id("id")
             .titulo("titulo")
-            .tempoLimite(LocalDateTime.now())
+            .sessaoVotacao(sessaoVotacaoDefault())
             .build();
     }
 
     public static Pauta pautaEncerrada() {
         return Pauta.builder().id("id")
             .titulo("titulo")
-            .tempoLimite(LocalDateTime.now().minusMinutes(1))
+            .sessaoVotacao(sessaoVotacaoEncerrada())
             .build();
     }
 

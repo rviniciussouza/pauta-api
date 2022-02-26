@@ -1,6 +1,9 @@
 package com.example.pautaapi.service.impl;
 
+import java.util.Optional;
+
 import com.example.pautaapi.domain.Pauta;
+import com.example.pautaapi.domain.Voto;
 import com.example.pautaapi.exception.PautaNaoEncontradaException;
 import com.example.pautaapi.repository.PautaRepository;
 import com.example.pautaapi.service.PautaService;
@@ -26,9 +29,9 @@ public class PautaServiceImpl implements PautaService {
     }
 
     public Pauta abrirSessao(String idPauta, Integer minutos) {
-        return repository.findById(idPauta)
-        .map(pauta -> pauta.abrirSecao(minutos))
-        .map(repository::save)
-        .orElseThrow(() -> new PautaNaoEncontradaException(idPauta));
+        return Optional.of(this.getPauta(idPauta))
+            .map(pauta -> pauta.abrirSecao(minutos))
+            .map(repository::save)
+            .orElseThrow(() -> new PautaNaoEncontradaException(idPauta));
     }
 }

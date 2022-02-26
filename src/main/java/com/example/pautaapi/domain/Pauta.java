@@ -22,20 +22,13 @@ public class Pauta {
     @Id
     private String id;
     private String titulo;
-    private LocalDateTime tempoLimite;
-    private List<Voto> votos;
+    private SessaoVotacao sessaoVotacao;
 
     public Pauta abrirSecao(Integer minutos) {
-        if(this.tempoLimite != null) {
+        if(this.sessaoVotacao != null) {
             throw new SessaoJaIniciadaException(id);
         }
-        this.tempoLimite = definirTempoLimite(minutos);
+        this.sessaoVotacao = new SessaoVotacao(minutos);
         return this;
-    }
-
-    public LocalDateTime definirTempoLimite(Integer minutos) {
-        return LocalDateTime.now().plusMinutes(
-            minutos == null ? 1 : minutos
-        );
     }
 }
