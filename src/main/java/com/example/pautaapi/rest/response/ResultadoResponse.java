@@ -1,5 +1,7 @@
 package com.example.pautaapi.rest.response;
 
+import java.io.Serializable;
+
 import com.example.pautaapi.constants.ResultadoVotacao;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ResultadoResponse {
+public class ResultadoResponse implements Serializable{
     @ApiModelProperty(notes = "Identificador único da pauta")
     private String idPauta;
     @ApiModelProperty(notes = "Título da pauta")
