@@ -44,6 +44,9 @@ public class PautaServiceTest {
     @MockBean
     PautaRepository repository;
 
+    @MockBean
+    CpfService cpfService;
+
     @Captor
     private ArgumentCaptor<Pauta> pautaArgumentCaptor;
 
@@ -51,7 +54,7 @@ public class PautaServiceTest {
 
     @BeforeEach 
     public void setUp() {
-        this.service = new PautaServiceImpl(repository);
+        this.service = new PautaServiceImpl(repository, cpfService);
         voto = new Voto("idAssociado", "CPF", OpcaoVoto.SIM);
     }
 

@@ -10,16 +10,22 @@ import com.example.pautaapi.domain.Voto;
 import com.example.pautaapi.exception.PautaNaoEncontradaException;
 import com.example.pautaapi.repository.PautaRepository;
 import com.example.pautaapi.rest.response.ResultadoResponse;
+import com.example.pautaapi.service.CpfService;
 import com.example.pautaapi.service.PautaService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PautaServiceImpl implements PautaService {
+    
     private PautaRepository repository;
+    private CpfService cpfService;
 
-    public PautaServiceImpl(PautaRepository repository) {
+    @Autowired
+    public PautaServiceImpl(PautaRepository repository, CpfService cpfService) {
         this.repository = repository;
+        this.cpfService = cpfService;
     }
 
     public Pauta criarPauta(Pauta pauta) {
@@ -41,6 +47,7 @@ public class PautaServiceImpl implements PautaService {
 
     @Override
     public Pauta adicionarVoto(String idPauta, Voto voto) {
+        cpfService.validar(voto.getCpfAssociado());
         return Optional.of(this.getPauta(idPauta))
             .map(pauta -> pauta.adicionarVoto(voto))
             .map(repository::save)
