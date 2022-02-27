@@ -1,11 +1,12 @@
-package com.example.pautaapi;
+package com.example.pautaapi.configs;
 
 import com.example.pautaapi.exception.ApiErrors;
 import com.example.pautaapi.exception.BussinesException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,22 +16,24 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
     
+    private Logger logger = LoggerFactory.getLogger(ApplicationControllerAdvice.class);
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleValidationExcepetion(MethodArgumentNotValidException ex) {
-        BindingResult bindingResult = ex.getBindingResult();
-        return new ApiErrors(bindingResult);
+        this.logger.error(ex.getMessage(), ex);
+        return new ApiErrors(ex.getBindingResult());
     }
 
     @ExceptionHandler(BussinesException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrors handleBussinesExcepetion(BussinesException ex) {
-        return new ApiErrors(ex);
+    public ResponseEntity<ApiErrors> handleBussinesExcepetion(BussinesException ex) {
+        this.logger.error(ex.getMessage(), ex);
+        return new ResponseEntity<ApiErrors>(new ApiErrors(ex), ex.getStatus());
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiErrors> handleResponseStatusException(ResponseStatusException ex) {
+        this.logger.error(ex.getMessage(), ex);
         return new ResponseEntity<ApiErrors>(new ApiErrors(ex), ex.getStatus());
     }
 }

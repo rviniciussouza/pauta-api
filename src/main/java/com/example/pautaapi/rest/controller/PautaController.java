@@ -50,7 +50,7 @@ public class PautaController {
         @PathVariable String idPauta,
         @RequestBody SessaoRequest sessaoRequest)
     {
-        logger.info("Tentativa de abertura de seção para a pauta {}", idPauta);
+        logger.info("Tentativa de abertura de sessão para a pauta {}", idPauta);
         Pauta pauta = service.abrirSessao(idPauta, sessaoRequest.getMinutos());
         return modelMapper.map(pauta, PautaResponse.class);
     }
