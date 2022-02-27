@@ -1,7 +1,6 @@
 package com.example.pautaapi.rest.response;
 
-import javax.validation.constraints.NotEmpty;
-
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PautaResponse {
-    @NotEmpty
+    @ApiModelProperty(notes = "Título da pauta")
     private String titulo;
+    @ApiModelProperty(notes = "Identificador único da pauta")
     private String id;
 }

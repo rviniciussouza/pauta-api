@@ -24,6 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+
 @RestController
 @RequestMapping("/api/v1/pautas")
 public class PautaController {
@@ -36,6 +42,10 @@ public class PautaController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @ApiOperation(value = "Cria uma nova pauta", response = PautaResponse.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Pauta criada com sucesso")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PautaResponse criarPauta(@RequestBody @Valid PautaRequest pautaRequest) {
@@ -44,10 +54,16 @@ public class PautaController {
         return modelMapper.map(service.criarPauta(pauta), PautaResponse.class);
     }
 
+    @ApiOperation(value = "Abre sessão de votação", response = PautaResponse.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Sessão de votação aberta com sucesso"),
+        @ApiResponse(code = 404, message = "A pauta que você está tentando acessar não foi encontrada"),
+        @ApiResponse(code = 409, message = "A sessão de votação para a pauta requisitada já foi aberta anteriormente"),
+    })
     @PostMapping("/{idPauta}/abrir")
     @ResponseStatus(HttpStatus.OK)
     public PautaResponse abrirSessaoVotacao(
-        @PathVariable String idPauta,
+        @PathVariable @ApiParam(name = "Identificador da pauta", required = true) String idPauta,
         @RequestBody SessaoRequest sessaoRequest)
     {
         logger.info("Tentativa de abertura de sessão para a pauta {}", idPauta);
@@ -55,6 +71,12 @@ public class PautaController {
         return modelMapper.map(pauta, PautaResponse.class);
     }
 
+    @ApiOperation(value = "Adiciona um novo voto", response = PautaResponse.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Voto adicionado com sucesso"),
+        @ApiResponse(code = 404, message = "A pauta que você está tentando acessar não foi encontrada"),
+        @ApiResponse(code = 409, message = "A pauta requisitada não está aberta para votação")
+    })
     @PostMapping("/{idPauta}/votar")
     @ResponseStatus(HttpStatus.OK)
     public PautaResponse votar(
@@ -67,6 +89,12 @@ public class PautaController {
         return modelMapper.map(pauta, PautaResponse.class);
     }
 
+    @ApiOperation(value = "Recupera o resultado da sessão de votação", response = PautaResponse.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Resultado obtido com sucesso"),
+        @ApiResponse(code = 404, message = "A pauta que você está tentando acessar não foi encontrada"),
+        @ApiResponse(code = 409, message = "A pauta requisitada não possui uma sessão de votação")
+    })
     @GetMapping("/{idPauta}/resultado")
     @ResponseStatus(HttpStatus.OK)
     public ResultadoResponse votar(@PathVariable String idPauta) {
