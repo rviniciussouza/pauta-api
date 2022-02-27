@@ -1,5 +1,7 @@
 package com.example.pautaapi.domain;
 
+import com.example.pautaapi.constants.OpcaoVoto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

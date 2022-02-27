@@ -1,10 +1,11 @@
 package com.example.pautaapi.rest.controller;
 
-import com.example.pautaapi.domain.OpcaoVoto;
+import com.example.pautaapi.constants.OpcaoVoto;
 import com.example.pautaapi.domain.Pauta;
 import com.example.pautaapi.rest.request.PautaRequest;
 import com.example.pautaapi.rest.request.SessaoRequest;
 import com.example.pautaapi.rest.request.VotoRequest;
+import com.example.pautaapi.rest.response.ResultadoResponse;
 import com.example.pautaapi.service.PautaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.example.pautaapi.stubs.PautaStub.pautaAberta;
+import static com.example.pautaapi.stubs.PautaStub.pautaSemSessao;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +50,7 @@ public class PautaControllerTest {
 
         String content = new ObjectMapper().writeValueAsString(pautaRequest);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-            .post("/api/v1/pautas")
+            .post(PAUTA_API)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(content);
@@ -62,8 +64,7 @@ public class PautaControllerTest {
     @DisplayName("Deve abrir uma sessão de votação para a pauta")
     public void abrirSessaoVotacao() throws Exception {
         SessaoRequest sessaoRequest = new SessaoRequest(2);
-        Pauta pauta = Pauta.builder().id("id").titulo("titulo").build();
-        when(service.abrirSessao(Mockito.any(), Mockito.any())).thenReturn(pauta);
+        when(service.abrirSessao(Mockito.any(), Mockito.any())).thenReturn(pautaSemSessao());
         String content = new ObjectMapper().writeValueAsString(sessaoRequest);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post(PAUTA_API + "/id/abrir")
@@ -85,6 +86,18 @@ public class PautaControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(content);
+        mvc.perform(request)
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve obter o resultado da sessão de votos de uma pauta")
+    public void obterResultado() throws Exception {
+        ResultadoResponse response = new ResultadoResponse();
+        when(service.obterResultadoVotacao(Mockito.anyString())).thenReturn(response);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .get(PAUTA_API + "/id/resultado")
+            .accept(MediaType.APPLICATION_JSON);
         mvc.perform(request)
             .andExpect(status().isOk());
     }

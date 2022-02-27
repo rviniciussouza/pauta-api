@@ -1,9 +1,14 @@
 package com.example.pautaapi.domain;
 
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.example.pautaapi.constants.OpcaoVoto;
 import com.example.pautaapi.exception.SessaoFinalizadaExcepetion;
 import com.example.pautaapi.exception.VotoDuplicadoException;
 
@@ -50,5 +55,11 @@ public class SessaoVotacao {
 
     private boolean sessaoFinalizada() {
         return LocalDateTime.now().isAfter(this.tempoLimite);
+    }
+
+    public Map<OpcaoVoto, Long> calcularResultado() {
+        return this.votos
+            .stream()
+            .collect(groupingBy(Voto::getVoto, counting()));
     }
 }

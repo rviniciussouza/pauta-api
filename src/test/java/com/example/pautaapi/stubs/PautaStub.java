@@ -1,5 +1,7 @@
 package com.example.pautaapi.stubs;
 
+import static com.example.pautaapi.stubs.SessaoStub.sessaoComEmpateDeVotos;
+import static com.example.pautaapi.stubs.SessaoStub.sessaoComVotosSIM;
 import static com.example.pautaapi.stubs.SessaoStub.sessaoVotacaoDefault;
 import static com.example.pautaapi.stubs.SessaoStub.sessaoVotacaoEncerrada;
 
@@ -24,6 +26,20 @@ public class PautaStub {
     public static Pauta pautaSemSessao() {
         return Pauta.builder().id("id")
             .titulo("titulo")
+            .build();
+    }
+
+    public static Pauta pautaComVotosSim() {
+        return Pauta.builder().id("id")
+            .titulo("titulo")
+            .sessaoVotacao(sessaoComVotosSIM())
+            .build();
+    }
+
+    public static Pauta pautaComEmpateDeVotos() {
+        return Pauta.builder().id("id")
+            .titulo("titulo")
+            .sessaoVotacao(sessaoComEmpateDeVotos())
             .build();
     }
 }

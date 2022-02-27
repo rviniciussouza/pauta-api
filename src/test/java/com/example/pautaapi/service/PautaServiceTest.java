@@ -1,19 +1,23 @@
 package com.example.pautaapi.service;
 
-import com.example.pautaapi.domain.OpcaoVoto;
+import com.example.pautaapi.constants.OpcaoVoto;
+import com.example.pautaapi.constants.ResultadoVotacao;
 import com.example.pautaapi.domain.Pauta;
 import com.example.pautaapi.domain.Voto;
 import com.example.pautaapi.exception.PautaNaoEncontradaException;
 import com.example.pautaapi.exception.SessaoFinalizadaExcepetion;
-import com.example.pautaapi.exception.SessaoNaoAbertaException;
-import com.example.pautaapi.exception.VotoDuplicadoException;
+import com.example.pautaapi.exception.SessaoNaoEncontrada;
 import com.example.pautaapi.repository.PautaRepository;
+import com.example.pautaapi.rest.response.ResultadoResponse;
 import com.example.pautaapi.service.impl.PautaServiceImpl;
+import com.example.pautaapi.stubs.PautaStub;
 
 import static com.example.pautaapi.stubs.PautaStub.pautaAberta;
+import static com.example.pautaapi.stubs.PautaStub.pautaComVotosSim;
 import static com.example.pautaapi.stubs.PautaStub.pautaEncerrada;
 import static com.example.pautaapi.stubs.PautaStub.pautaSemSessao;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -85,7 +89,7 @@ public class PautaServiceTest {
         when(repository.findById(any())).thenReturn(Optional.of(pautaSemSessao()));
         Throwable exception = Assertions.catchThrowable(
             () -> service.adicionarVoto("idPauta", this.voto));
-        assertThat(exception).isInstanceOf(SessaoNaoAbertaException.class);
+        assertThat(exception).isInstanceOf(SessaoNaoEncontrada.class);
     }
 
     @Test
@@ -95,5 +99,27 @@ public class PautaServiceTest {
         Throwable exception = Assertions.catchThrowable(
             () -> service.adicionarVoto("idPauta", this.voto));
         assertThat(exception).isInstanceOf(SessaoFinalizadaExcepetion.class);
+    }
+
+    @Test
+    @DisplayName("Deve contabilizar e retornar o resultado de uma votação")             
+    public void obterResultadoVotacao() {
+        when(repository.findById(any())).thenReturn(Optional.of(pautaComVotosSim()));
+        ResultadoResponse resultado = service.obterResultadoVotacao("id");
+        assertNotNull(resultado.getTitulo());
+        assertEquals(3, resultado.getQtdVotosSim());
+        assertEquals(1, resultado.getQtdVotosNao());
+        assertEquals(ResultadoVotacao.SIM, resultado.getResultado());
+    }
+
+    @Test
+    @DisplayName("Deve contabilizar e retornar o resultado de uma votação")             
+    public void obterResultadoVotacaoComEmpate() {
+        when(repository.findById(any())).thenReturn(Optional.of(PautaStub.pautaComEmpateDeVotos()));
+        ResultadoResponse resultado = service.obterResultadoVotacao("id");
+        assertNotNull(resultado.getTitulo());
+        assertEquals(2, resultado.getQtdVotosSim());
+        assertEquals(2, resultado.getQtdVotosNao());
+        assertEquals(ResultadoVotacao.EMPATE, resultado.getResultado());
     }
 }

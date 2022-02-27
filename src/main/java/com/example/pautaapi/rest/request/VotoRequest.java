@@ -2,7 +2,7 @@ package com.example.pautaapi.rest.request;
 
 import javax.validation.constraints.NotEmpty;
 
-import com.example.pautaapi.domain.OpcaoVoto;
+import com.example.pautaapi.constants.OpcaoVoto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

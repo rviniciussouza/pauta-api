@@ -1,4 +1,4 @@
-package com.example.pautaapi.domain;
+package com.example.pautaapi.constants;
 
 public enum OpcaoVoto {
     SIM,
