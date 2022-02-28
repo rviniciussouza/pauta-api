@@ -19,7 +19,29 @@
 
 ### Decisões técnicas
 
+A aplicação foi dividida em três camadas, sendo elas: domínio, service e controller.
 
+O domínio consiste das classes Pauta, Sessão e Voto. Cada uma dessas classes contém suas prórias regras de negócio e juntas definem uma collection não estrutura no mongodb.
+
+**Exemplo de um documento da collection Pauta**
+```
+{
+    _id: ObjectId("621c5ff552df3e5a49e3b51a"),
+    titulo: 'Títutlo da pauta',
+    sessaoVotacao: {
+      tempoLimite: ISODate("2022-02-28T05:40:08.145Z"),
+      votos: [
+        {
+          _id: '1',
+          idAssociado: '1',
+          cpfAssociado: '31209995042',
+          voto: 'SIM'
+        }
+      ]
+    },
+    status: 'ENCERRADA',
+}
+```
 
 
 ### Execução
@@ -28,3 +50,13 @@
 docker-compose up
 
 ```
+
+### Documentação no Swagger
+
+http://localhost:8080/swagger-ui/index.html
+
+### RabbitMQ UI
+
+http://localhost:15672/#/
+
+
