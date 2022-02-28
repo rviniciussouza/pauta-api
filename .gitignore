@@ -26,5 +26,6 @@ hs_err_pid*
 .vscode
 
 #spring
-target/
+target/*
+!target/*.jar
 HELP.md
