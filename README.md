@@ -43,6 +43,13 @@ O domínio consiste das classes Pauta, Sessão e Voto. Cada uma dessas classes c
 }
 ```
 
+Uma Pauta pode ter os seguintes status:
+ - NAOINICIADA: Indica que essa pauta ainda não foi aberta para votação
+ - ABERTA: Indica que a pauta foi aberta para votação
+ - ENCERRADA: Indica que a sessão de votação para a pauta foi encerrada
+
+Para encerrar uma pauta, foi definido um agendador de tarefas (schedule) que a cada segundo busca por todas as pautas abertas e verifica se o tempo limite de votação foi atingido. Quando encontrada, essa pauta é então marcado como ENCERRADA e o resultado da votação é contabilizado e enviado para a fila de mensagens pelo RabbitMQ.
+
 
 ### Executando o projeto
 
@@ -57,12 +64,15 @@ O domínio consiste das classes Pauta, Sessão e Voto. Cada uma dessas classes c
 mvn test -P dev
 ```
 
-#### Build e Execução da aplicação
+#### Execução da aplicação
 ```
-mvn package -DskipTests
 docker-compose build
 docker-compose up
 ```
+
+### Endereço da API
+
+http://localhost:8080/
 
 ### Documentação no Swagger
 
