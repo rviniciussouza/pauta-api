@@ -21,7 +21,7 @@
 
 A aplicação foi dividida em três camadas, sendo elas: domínio, service e controller.
 
-O domínio consiste das classes Pauta, Sessão e Voto. Cada uma dessas classes contém suas prórias regras de negócio e juntas definem uma collection não estrutura no mongodb.
+O domínio consiste das classes Pauta, Sessão e Voto. Cada uma dessas classes contém suas próprias regras de negócio e juntas definem uma collection não estrutura no mongodb.
 
 **Exemplo de um documento da collection Pauta**
 ```
@@ -44,11 +44,24 @@ O domínio consiste das classes Pauta, Sessão e Voto. Cada uma dessas classes c
 ```
 
 
-### Execução
+### Executando o projeto
+
+#### Serviços
+- Servidor de mensageria RabbitMq
+- Mongodb
+- Pauta-API
+
+#### Execução dos testes
 
 ```
-docker-compose up
+mvn test -P dev
+```
 
+#### Build e Execução da aplicação
+```
+mvn package -DskipTests
+docker-compose build
+docker-compose up
 ```
 
 ### Documentação no Swagger
