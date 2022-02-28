@@ -105,7 +105,7 @@ public class PautaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve contabilizar e retornar o resultado de uma votação")             
+    @DisplayName("Deve contabilizar e retornar o resultado final da votação")             
     public void obterResultadoVotacao() {
         when(repository.findById(any())).thenReturn(Optional.of(pautaComVotosSim()));
         ResultadoResponse resultado = service.obterResultadoVotacao("id");
@@ -116,7 +116,7 @@ public class PautaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve contabilizar e retornar o resultado de uma votação")             
+    @DisplayName("Deve contabilizar e retornar o resultado final da votação")             
     public void obterResultadoVotacaoComEmpate() {
         when(repository.findById(any())).thenReturn(Optional.of(PautaStub.pautaComEmpateDeVotos()));
         ResultadoResponse resultado = service.obterResultadoVotacao("id");

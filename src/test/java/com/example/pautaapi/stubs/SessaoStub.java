@@ -37,6 +37,19 @@ public class SessaoStub {
         return sessao;
     }
 
+    public static SessaoVotacao sessaoApenasComVotosSim() {
+        SessaoVotacao sessao = new SessaoVotacao();
+        sessao.setTempoLimite(LocalDateTime.now().minusMinutes(1));
+        List<Voto> votos = Arrays.asList(
+            new Voto("1", "CPF1", OpcaoVoto.SIM),
+            new Voto("2", "CPF2", OpcaoVoto.SIM),
+            new Voto("3", "CPF3", OpcaoVoto.SIM),
+            new Voto("4", "CPF4", OpcaoVoto.SIM)
+        );
+        sessao.setVotos(votos);
+        return sessao;
+    }
+
     public static SessaoVotacao sessaoComEmpateDeVotos() {
         SessaoVotacao sessao = new SessaoVotacao();
         sessao.setTempoLimite(LocalDateTime.now().minusMinutes(1));
