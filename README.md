@@ -57,9 +57,8 @@ O domínio consiste das classes Pauta, Sessão e Voto. Cada uma dessas classes c
 mvn test -P dev
 ```
 
-#### Build e Execução da aplicação
+#### Execução da aplicação
 ```
-mvn package -DskipTests
 docker-compose build
 docker-compose up
 ```
