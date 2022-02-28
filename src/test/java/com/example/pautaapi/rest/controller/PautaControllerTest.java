@@ -46,7 +46,7 @@ public class PautaControllerTest {
     public void cadastrarPauta() throws Exception {
         PautaRequest pautaRequest = new PautaRequest("titulo");
         Pauta pauta = Pauta.builder().id("id").titulo("titulo").build();
-        when(service.criarPauta(Mockito.any())).thenReturn(pauta);
+        when(service.salvar(Mockito.any())).thenReturn(pauta);
 
         String content = new ObjectMapper().writeValueAsString(pautaRequest);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders

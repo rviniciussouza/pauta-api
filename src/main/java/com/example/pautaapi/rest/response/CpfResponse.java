@@ -1,8 +1,14 @@
 package com.example.pautaapi.rest.response;
 
-public class CpfResponse {
+import java.io.Serializable;
+
+public class CpfResponse implements Serializable {
     private String status;
 
+    public CpfResponse() {
+
+    }
+    
     public CpfResponse(String status) {
         this.status = status;
     }

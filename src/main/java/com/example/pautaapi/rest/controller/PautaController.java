@@ -51,7 +51,7 @@ public class PautaController {
     public PautaResponse criarPauta(@RequestBody @Valid PautaRequest pautaRequest) {
         logger.info("Tentativa de criação da pauta {}", pautaRequest);
         Pauta pauta = modelMapper.map(pautaRequest, Pauta.class);
-        return modelMapper.map(service.criarPauta(pauta), PautaResponse.class);
+        return modelMapper.map(service.salvar(pauta), PautaResponse.class);
     }
 
     @ApiOperation(value = "Abre sessão de votação", response = PautaResponse.class)

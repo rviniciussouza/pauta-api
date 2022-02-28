@@ -53,7 +53,7 @@ public class SessaoVotacao {
             .anyMatch(voto -> voto.getIdAssociado().equals(idAssociado));
     }
 
-    private boolean sessaoFinalizada() {
+    public boolean sessaoFinalizada() {
         return LocalDateTime.now().isAfter(this.tempoLimite);
     }
 

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.example.pautaapi.constants.OpcaoVoto;
+import com.example.pautaapi.constants.StatusPauta;
 import com.example.pautaapi.exception.SessaoJaIniciadaException;
 import com.example.pautaapi.exception.SessaoNaoEncontrada;
 
@@ -25,7 +26,9 @@ public class Pauta {
     private String id;
     private String titulo;
     private SessaoVotacao sessaoVotacao;
-
+    @Builder.Default
+    private StatusPauta status = StatusPauta.NAOINICIADA;
+    
     public Pauta abrirSecao(Integer minutos) {
         if(this.sessaoVotacao != null) {
             throw new SessaoJaIniciadaException(id);

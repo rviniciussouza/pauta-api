@@ -13,7 +13,6 @@ public class ApiErrors {
 
     public ApiErrors(BindingResult bindingResult) {
         this.erros = new ArrayList<>();
-        System.out.println(bindingResult.getFieldErrors());
         bindingResult.getFieldErrors().forEach(fieldError -> {
             this.erros.add(fieldError.getField() + " " + fieldError.getDefaultMessage());
         });

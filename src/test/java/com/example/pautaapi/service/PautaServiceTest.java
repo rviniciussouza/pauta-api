@@ -61,7 +61,7 @@ public class PautaServiceTest {
     @Test
     @DisplayName("Deve criar uma pauta com sucesso")
     public void criarPauta() {
-        service.criarPauta(pautaSemSessao());
+        service.salvar(pautaSemSessao());
         verify(repository, Mockito.times(1)).save(pautaSemSessao());
     }
 
