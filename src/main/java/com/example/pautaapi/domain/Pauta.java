@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.example.pautaapi.constants.OpcaoVoto;
 import com.example.pautaapi.constants.StatusPauta;
 import com.example.pautaapi.exception.SessaoJaIniciadaException;
-import com.example.pautaapi.exception.SessaoNaoEncontrada;
+import com.example.pautaapi.exception.SessaoNaoEncontradaException;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,7 +29,7 @@ public class Pauta {
     @Builder.Default
     private StatusPauta status = StatusPauta.NAOINICIADA;
     
-    public Pauta abrirSecao(Integer minutos) {
+    public Pauta abrirSessao(Integer minutos) {
         if(this.sessaoVotacao != null) {
             throw new SessaoJaIniciadaException(id);
         }
@@ -39,15 +39,15 @@ public class Pauta {
 
     public Pauta adicionarVoto(Voto voto) {
         if(this.sessaoVotacao == null) {
-            throw new SessaoNaoEncontrada(id);
+            throw new SessaoNaoEncontradaException(id);
         }
         this.sessaoVotacao.votar(voto);
         return this;
     }
 
     public Map<OpcaoVoto, Long> obterResultado() {
-        return Optional.ofNullable(sessaoVotacao)
-            .map(SessaoVotacao::calcularResultado)
-            .orElseThrow(() -> new SessaoNaoEncontrada(id));
+        return Optional.ofNullable(this.sessaoVotacao)
+            .map(SessaoVotacao::contabilizarResultado)
+            .orElseThrow(() -> new SessaoNaoEncontradaException(id));
     }
 }

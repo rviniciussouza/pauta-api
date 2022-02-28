@@ -36,7 +36,7 @@ public class SessaoVotacaoTest {
     }
 
     @Test
-    @DisplayName("Deve obter true")
+    @DisplayName("Deve indicar que o associado já votou")
     public void associadoJaVotou() {
         /* Contém um voto para o associado de id 1 */
         SessaoVotacao sessao = SessaoStub.sessaoComVotosSIM();
@@ -55,7 +55,7 @@ public class SessaoVotacaoTest {
     @Test
     public void resultadoApenasComVotosSim() {
         SessaoVotacao sessao = SessaoStub.sessaoApenasComVotosSim();
-        Map<OpcaoVoto, Long> qtdVotos = sessao.calcularResultado();
+        Map<OpcaoVoto, Long> qtdVotos = sessao.contabilizarResultado();
         assertEquals(4, qtdVotos.get(OpcaoVoto.SIM));
         assertNull(qtdVotos.get(OpcaoVoto.NAO));
     }
@@ -63,7 +63,7 @@ public class SessaoVotacaoTest {
     @Test
     public void resultadoComEmpate() {
         SessaoVotacao sessao = SessaoStub.sessaoComEmpateDeVotos();
-        Map<OpcaoVoto, Long> qtdVotos = sessao.calcularResultado();
+        Map<OpcaoVoto, Long> qtdVotos = sessao.contabilizarResultado();
         assertEquals(2, qtdVotos.get(OpcaoVoto.SIM));
         assertEquals(2, qtdVotos.get(OpcaoVoto.NAO));
     }

@@ -26,7 +26,7 @@ public class VerificadorDeSessoes {
     @Autowired
     private PautaService pautaService;
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 1000)
     public void encerraSessoesRecemFinalizadas() {
         List<Pauta> pautasAbertas = pautaService.getPautasByStatus(StatusPauta.ABERTA);
         logger.info("{} pautas abertas encontradas", pautasAbertas.size());
@@ -38,9 +38,9 @@ public class VerificadorDeSessoes {
             }).forEach(
                 pautaEncerrada -> {
                     logger.info("Gerando resultado da votação para a pauta {}", pautaEncerrada);
-                    ResultadoResponse resulado = pautaService.obterResultadoVotacao(pautaEncerrada.getId());
-                    logger.info("Publicando resultado da votação {} na fila {}", resulado, RabbitMQ.QUEUE_PAUTA);
-                    rabbitMQService.sendMessage(RabbitMQ.QUEUE_PAUTA, resulado);
+                    ResultadoResponse resultado = pautaService.obterResultadoVotacao(pautaEncerrada.getId());
+                    logger.info("Publicando resultado {} na fila {}", resultado, RabbitMQ.QUEUE_PAUTA);
+                    rabbitMQService.sendMessage(RabbitMQ.QUEUE_PAUTA, resultado);
                 }
             );
     }

@@ -6,7 +6,7 @@ import com.example.pautaapi.domain.Pauta;
 import com.example.pautaapi.domain.Voto;
 import com.example.pautaapi.exception.PautaNaoEncontradaException;
 import com.example.pautaapi.exception.SessaoFinalizadaExcepetion;
-import com.example.pautaapi.exception.SessaoNaoEncontrada;
+import com.example.pautaapi.exception.SessaoNaoEncontradaException;
 import com.example.pautaapi.repository.PautaRepository;
 import com.example.pautaapi.rest.response.ResultadoResponse;
 import com.example.pautaapi.service.impl.PautaServiceImpl;
@@ -92,7 +92,7 @@ public class PautaServiceTest {
         when(repository.findById(any())).thenReturn(Optional.of(pautaSemSessao()));
         Throwable exception = Assertions.catchThrowable(
             () -> service.adicionarVoto("idPauta", this.voto));
-        assertThat(exception).isInstanceOf(SessaoNaoEncontrada.class);
+        assertThat(exception).isInstanceOf(SessaoNaoEncontradaException.class);
     }
 
     @Test

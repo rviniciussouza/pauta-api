@@ -57,7 +57,7 @@ public class SessaoVotacao {
         return LocalDateTime.now().isAfter(this.tempoLimite);
     }
 
-    public Map<OpcaoVoto, Long> calcularResultado() {
+    public Map<OpcaoVoto, Long> contabilizarResultado() {
         return this.votos
             .stream()
             .collect(groupingBy(Voto::getVoto, counting()));

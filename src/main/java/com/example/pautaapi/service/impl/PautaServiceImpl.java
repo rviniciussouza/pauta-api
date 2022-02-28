@@ -44,7 +44,7 @@ public class PautaServiceImpl implements PautaService {
         return Optional.of(this.getPauta(idPauta))
                 .map(pauta -> {
                     pauta.setStatus(StatusPauta.ABERTA);
-                    return pauta.abrirSecao(minutos);
+                    return pauta.abrirSessao(minutos);
                 }).map(repository::save)
                 .get();
     }

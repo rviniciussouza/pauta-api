@@ -15,18 +15,18 @@ public class PautaTest {
     
     @Test
     @DisplayName("Deve abrir a sessão de votação com sucesso")
-    public void abrirSecao() {
+    public void abrirSessao() {
         Pauta pauta = pautaSemSessao();
-        pauta.abrirSecao(null);
+        pauta.abrirSessao(null);
         assertNotNull(pauta.getSessaoVotacao());
     }
 
     @Test
     @DisplayName("Deve lançar um SessaoJaIniciadaException")
-    public void abrirSecaoAnteriormenteAberta() {
+    public void abrirSessaoAnteriormenteAberta() {
         Pauta pauta = pautaAberta();
         Throwable exception = Assertions.catchThrowable(
-            () -> pauta.abrirSecao(null));
+            () -> pauta.abrirSessao(null));
         assertThat(exception).isInstanceOf(SessaoJaIniciadaException.class);
         assertThat(exception.getMessage()).isEqualTo("A sessão da pauta 'id' já foi iniciada anteriormente.");
     }
