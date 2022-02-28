@@ -72,7 +72,7 @@ docker-compose up
 
 ### Endereço da API
 
-http://localhost:8080/
+http://localhost:8080/api/v1
 
 ### Documentação no Swagger
 
@@ -83,3 +83,14 @@ http://localhost:8080/swagger-ui/index.html
 http://localhost:15672/#/
 
 
+### Teste de carga utilizando Apache JMeter
+```
+| Endpoint                 | # Amostras | Média | Mín. | Máx. | Desvio Padrão | % de Erro | Vazão     | KB/s  | Sent KB/s | Média de Bytes |
+|--------------------------|------------|-------|------|------|---------------|-----------|-----------|-------|-----------|----------------|
+| /api/v1/pautas           | 100        | 1     | 1    | 3    | 0,44          | 0,00%     | 108,9/sec | 19,47 | 29,57     | 183,0          |
+| /api/v1/pautas/votar     | 100        | 204   | 146  | 887  | 156,64        | 49,0%     | 34,0/sec  | 13,49 | 216,0     | 216,0          |
+| /api/v1/pautas/votar *   | 100        | 23    | 6    | 378  | 48,19         | 0,00%     | 102,0/sec | 23,92 | 39,76     | 240,0          |
+| /api/v1/pautas/resultado | 100        | 3     | 2    | 9    | 0,87          | 0,00%     | 107,7/sec | 31,02 | 27,45     | 296,0          |
+```
+
+\* Sem validação de CPF via API externa
